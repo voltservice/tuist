@@ -15479,14 +15479,14 @@ public enum Components {
             public var covered_lines: Swift.Int
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/executable_lines`.
             public var executable_lines: Swift.Int
-            /// Product files some run measured.
-            ///
-            /// - Remark: Generated from `#/components/schemas/CommitCoverage/files_count`.
-            public var files_count: Swift.Int
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/git_commit_sha`.
             public var git_commit_sha: Swift.String
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/measured_at`.
             public var measured_at: Foundation.Date?
+            /// Product files some run measured.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CommitCoverage/measured_files_count`.
+            public var measured_files_count: Swift.Int
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/partial`.
             public var partial: Swift.Bool
             /// The schemes only measured by runs that skipped tests on purpose.
@@ -15544,7 +15544,7 @@ public enum Components {
             public var targets: Components.Schemas.CommitCoverage.targetsPayload
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/test_run_ids`.
             public var test_run_ids: [Swift.String]
-            /// Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+            /// Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
             ///
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/unmeasured_files_count`.
             public var unmeasured_files_count: Swift.Int
@@ -15558,15 +15558,15 @@ public enum Components {
             ///   - coverage: Line coverage over the measured product files, in percent.
             ///   - covered_lines:
             ///   - executable_lines:
-            ///   - files_count: Product files some run measured.
             ///   - git_commit_sha:
             ///   - measured_at:
+            ///   - measured_files_count: Product files some run measured.
             ///   - partial:
             ///   - partial_schemes: The schemes only measured by runs that skipped tests on purpose.
             ///   - schemes: The schemes that measured the commit.
             ///   - targets:
             ///   - test_run_ids:
-            ///   - unmeasured_files_count: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+            ///   - unmeasured_files_count: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
             public init(
                 baseline: Components.Schemas.CommitCoverage.baselinePayload? = nil,
                 baseline_reason: Components.Schemas.CommitCoverage.baseline_reasonPayload? = nil,
@@ -15575,9 +15575,9 @@ public enum Components {
                 coverage: Swift.Double,
                 covered_lines: Swift.Int,
                 executable_lines: Swift.Int,
-                files_count: Swift.Int,
                 git_commit_sha: Swift.String,
                 measured_at: Foundation.Date? = nil,
+                measured_files_count: Swift.Int,
                 partial: Swift.Bool,
                 partial_schemes: [Swift.String],
                 schemes: [Swift.String],
@@ -15592,9 +15592,9 @@ public enum Components {
                 self.coverage = coverage
                 self.covered_lines = covered_lines
                 self.executable_lines = executable_lines
-                self.files_count = files_count
                 self.git_commit_sha = git_commit_sha
                 self.measured_at = measured_at
+                self.measured_files_count = measured_files_count
                 self.partial = partial
                 self.partial_schemes = partial_schemes
                 self.schemes = schemes
@@ -15610,9 +15610,9 @@ public enum Components {
                 case coverage
                 case covered_lines
                 case executable_lines
-                case files_count
                 case git_commit_sha
                 case measured_at
+                case measured_files_count
                 case partial
                 case partial_schemes
                 case schemes
@@ -64633,14 +64633,14 @@ public enum Operations {
                         public var covered_lines: Swift.Int
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/executable_lines`.
                         public var executable_lines: Swift.Int
-                        /// Product files some run measured.
-                        ///
-                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/files_count`.
-                        public var files_count: Swift.Int
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/git_commit_sha`.
                         public var git_commit_sha: Swift.String
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/measured_at`.
                         public var measured_at: Foundation.Date?
+                        /// Product files some run measured.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/measured_files_count`.
+                        public var measured_files_count: Swift.Int
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/partial`.
                         public var partial: Swift.Bool
                         /// The schemes only measured by runs that skipped tests on purpose.
@@ -64698,7 +64698,7 @@ public enum Operations {
                         public var targets: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.targetsPayload
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/test_run_ids`.
                         public var test_run_ids: [Swift.String]
-                        /// Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+                        /// Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
                         ///
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/unmeasured_files_count`.
                         public var unmeasured_files_count: Swift.Int
@@ -64712,15 +64712,15 @@ public enum Operations {
                         ///   - coverage: Line coverage over the measured product files, in percent.
                         ///   - covered_lines:
                         ///   - executable_lines:
-                        ///   - files_count: Product files some run measured.
                         ///   - git_commit_sha:
                         ///   - measured_at:
+                        ///   - measured_files_count: Product files some run measured.
                         ///   - partial:
                         ///   - partial_schemes: The schemes only measured by runs that skipped tests on purpose.
                         ///   - schemes: The schemes that measured the commit.
                         ///   - targets:
                         ///   - test_run_ids:
-                        ///   - unmeasured_files_count: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+                        ///   - unmeasured_files_count: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
                         public init(
                             baseline: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.baselinePayload? = nil,
                             baseline_reason: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.baseline_reasonPayload? = nil,
@@ -64729,9 +64729,9 @@ public enum Operations {
                             coverage: Swift.Double,
                             covered_lines: Swift.Int,
                             executable_lines: Swift.Int,
-                            files_count: Swift.Int,
                             git_commit_sha: Swift.String,
                             measured_at: Foundation.Date? = nil,
+                            measured_files_count: Swift.Int,
                             partial: Swift.Bool,
                             partial_schemes: [Swift.String],
                             schemes: [Swift.String],
@@ -64746,9 +64746,9 @@ public enum Operations {
                             self.coverage = coverage
                             self.covered_lines = covered_lines
                             self.executable_lines = executable_lines
-                            self.files_count = files_count
                             self.git_commit_sha = git_commit_sha
                             self.measured_at = measured_at
+                            self.measured_files_count = measured_files_count
                             self.partial = partial
                             self.partial_schemes = partial_schemes
                             self.schemes = schemes
@@ -64764,9 +64764,9 @@ public enum Operations {
                             case coverage
                             case covered_lines
                             case executable_lines
-                            case files_count
                             case git_commit_sha
                             case measured_at
+                            case measured_files_count
                             case partial
                             case partial_schemes
                             case schemes
@@ -92045,14 +92045,14 @@ public enum Operations {
                         public var covered_lines: Swift.Int
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/executable_lines`.
                         public var executable_lines: Swift.Int
-                        /// Product files some run measured.
-                        ///
-                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/files_count`.
-                        public var files_count: Swift.Int
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/git_commit_sha`.
                         public var git_commit_sha: Swift.String
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/measured_at`.
                         public var measured_at: Foundation.Date?
+                        /// Product files some run measured.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/measured_files_count`.
+                        public var measured_files_count: Swift.Int
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/partial`.
                         public var partial: Swift.Bool
                         /// The schemes only measured by runs that skipped tests on purpose.
@@ -92110,7 +92110,7 @@ public enum Operations {
                         public var targets: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.targetsPayload
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/test_run_ids`.
                         public var test_run_ids: [Swift.String]
-                        /// Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+                        /// Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
                         ///
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/unmeasured_files_count`.
                         public var unmeasured_files_count: Swift.Int
@@ -92124,15 +92124,15 @@ public enum Operations {
                         ///   - coverage: Line coverage over the measured product files, in percent.
                         ///   - covered_lines:
                         ///   - executable_lines:
-                        ///   - files_count: Product files some run measured.
                         ///   - git_commit_sha:
                         ///   - measured_at:
+                        ///   - measured_files_count: Product files some run measured.
                         ///   - partial:
                         ///   - partial_schemes: The schemes only measured by runs that skipped tests on purpose.
                         ///   - schemes: The schemes that measured the commit.
                         ///   - targets:
                         ///   - test_run_ids:
-                        ///   - unmeasured_files_count: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+                        ///   - unmeasured_files_count: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
                         public init(
                             baseline: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.baselinePayload? = nil,
                             baseline_reason: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.baseline_reasonPayload? = nil,
@@ -92141,9 +92141,9 @@ public enum Operations {
                             coverage: Swift.Double,
                             covered_lines: Swift.Int,
                             executable_lines: Swift.Int,
-                            files_count: Swift.Int,
                             git_commit_sha: Swift.String,
                             measured_at: Foundation.Date? = nil,
+                            measured_files_count: Swift.Int,
                             partial: Swift.Bool,
                             partial_schemes: [Swift.String],
                             schemes: [Swift.String],
@@ -92158,9 +92158,9 @@ public enum Operations {
                             self.coverage = coverage
                             self.covered_lines = covered_lines
                             self.executable_lines = executable_lines
-                            self.files_count = files_count
                             self.git_commit_sha = git_commit_sha
                             self.measured_at = measured_at
+                            self.measured_files_count = measured_files_count
                             self.partial = partial
                             self.partial_schemes = partial_schemes
                             self.schemes = schemes
@@ -92176,9 +92176,9 @@ public enum Operations {
                             case coverage
                             case covered_lines
                             case executable_lines
-                            case files_count
                             case git_commit_sha
                             case measured_at
+                            case measured_files_count
                             case partial
                             case partial_schemes
                             case schemes

@@ -8680,11 +8680,6 @@ components:
           type: integer
           x-struct:
           x-validate:
-        files_count:
-          description: Product files some run measured.
-          type: integer
-          x-struct:
-          x-validate:
         git_commit_sha:
           type: string
           x-struct:
@@ -8692,6 +8687,11 @@ components:
         measured_at:
           format: date-time
           type: string
+          x-struct:
+          x-validate:
+        measured_files_count:
+          description: Product files some run measured.
+          type: integer
           x-struct:
           x-validate:
         partial:
@@ -8762,7 +8762,7 @@ components:
           x-struct:
           x-validate:
         unmeasured_files_count:
-          description: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+          description: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
           type: integer
           x-struct:
           x-validate:
@@ -8771,7 +8771,7 @@ components:
         - covered_lines
         - executable_lines
         - coverage
-        - files_count
+        - measured_files_count
         - unmeasured_files_count
         - schemes
         - partial_schemes
@@ -26743,11 +26743,6 @@ paths:
                     type: integer
                     x-struct:
                     x-validate:
-                  files_count:
-                    description: Product files some run measured.
-                    type: integer
-                    x-struct:
-                    x-validate:
                   git_commit_sha:
                     type: string
                     x-struct:
@@ -26755,6 +26750,11 @@ paths:
                   measured_at:
                     format: date-time
                     type: string
+                    x-struct:
+                    x-validate:
+                  measured_files_count:
+                    description: Product files some run measured.
+                    type: integer
                     x-struct:
                     x-validate:
                   partial:
@@ -26825,7 +26825,7 @@ paths:
                     x-struct:
                     x-validate:
                   unmeasured_files_count:
-                    description: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+                    description: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
                     type: integer
                     x-struct:
                     x-validate:
@@ -26834,7 +26834,7 @@ paths:
                   - covered_lines
                   - executable_lines
                   - coverage
-                  - files_count
+                  - measured_files_count
                   - unmeasured_files_count
                   - schemes
                   - partial_schemes
@@ -36629,11 +36629,6 @@ paths:
                     type: integer
                     x-struct:
                     x-validate:
-                  files_count:
-                    description: Product files some run measured.
-                    type: integer
-                    x-struct:
-                    x-validate:
                   git_commit_sha:
                     type: string
                     x-struct:
@@ -36641,6 +36636,11 @@ paths:
                   measured_at:
                     format: date-time
                     type: string
+                    x-struct:
+                    x-validate:
+                  measured_files_count:
+                    description: Product files some run measured.
+                    type: integer
                     x-struct:
                     x-validate:
                   partial:
@@ -36711,7 +36711,7 @@ paths:
                     x-struct:
                     x-validate:
                   unmeasured_files_count:
-                    description: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured; 0 when the listing is not stored.
+                    description: Source files of the commit's listing (of the kinds the runs measured, minus the excluded paths) that no run measured, shown in the dashboard as "Files without coverage data"; 0 when the listing is not stored.
                     type: integer
                     x-struct:
                     x-validate:
@@ -36720,7 +36720,7 @@ paths:
                   - covered_lines
                   - executable_lines
                   - coverage
-                  - files_count
+                  - measured_files_count
                   - unmeasured_files_count
                   - schemes
                   - partial_schemes
