@@ -9347,14 +9347,32 @@ components:
                 type: string
                 x-struct:
                 x-validate:
+              module:
+                description: The test target (Xcode), project (Gradle) or label (Bazel).
+                type: string
+                x-struct:
+                x-validate:
+              name:
+                description: The test's name; empty unless the scope is a test.
+                type: string
+                x-struct:
+                x-validate:
               scope_id:
-                description: '`Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target.'
+                description: 'The scope spelled for reading: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target. Not to be split: a module or a name may hold slashes; use the fields below.'
+                type: string
+                x-struct:
+                x-validate:
+              suite:
+                description: Empty for a target and for a test outside any suite.
                 type: string
                 x-struct:
                 x-validate:
             required:
               - kind
               - scope_id
+              - module
+              - suite
+              - name
               - files_count
             type: object
             x-struct:
@@ -36956,14 +36974,32 @@ paths:
                           type: string
                           x-struct:
                           x-validate:
+                        module:
+                          description: The test target (Xcode), project (Gradle) or label (Bazel).
+                          type: string
+                          x-struct:
+                          x-validate:
+                        name:
+                          description: The test's name; empty unless the scope is a test.
+                          type: string
+                          x-struct:
+                          x-validate:
                         scope_id:
-                          description: '`Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target.'
+                          description: 'The scope spelled for reading: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target. Not to be split: a module or a name may hold slashes; use the fields below.'
+                          type: string
+                          x-struct:
+                          x-validate:
+                        suite:
+                          description: Empty for a target and for a test outside any suite.
                           type: string
                           x-struct:
                           x-validate:
                       required:
                         - kind
                         - scope_id
+                        - module
+                        - suite
+                        - name
                         - files_count
                       type: object
                       x-struct:

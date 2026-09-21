@@ -16464,29 +16464,53 @@ public enum Components {
                 }
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidence/scopesPayload/kind`.
                 public var kind: Components.Schemas.TestRunCoverageEvidence.scopesPayloadPayload.kindPayload
-                /// `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target.
+                /// The test target (Xcode), project (Gradle) or label (Bazel).
+                ///
+                /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidence/scopesPayload/module`.
+                public var module: Swift.String
+                /// The test's name; empty unless the scope is a test.
+                ///
+                /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidence/scopesPayload/name`.
+                public var name: Swift.String
+                /// The scope spelled for reading: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target. Not to be split: a module or a name may hold slashes; use the fields below.
                 ///
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidence/scopesPayload/scope_id`.
                 public var scope_id: Swift.String
+                /// Empty for a target and for a test outside any suite.
+                ///
+                /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidence/scopesPayload/suite`.
+                public var suite: Swift.String
                 /// Creates a new `scopesPayloadPayload`.
                 ///
                 /// - Parameters:
                 ///   - files_count:
                 ///   - kind:
-                ///   - scope_id: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target.
+                ///   - module: The test target (Xcode), project (Gradle) or label (Bazel).
+                ///   - name: The test's name; empty unless the scope is a test.
+                ///   - scope_id: The scope spelled for reading: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target. Not to be split: a module or a name may hold slashes; use the fields below.
+                ///   - suite: Empty for a target and for a test outside any suite.
                 public init(
                     files_count: Swift.Int,
                     kind: Components.Schemas.TestRunCoverageEvidence.scopesPayloadPayload.kindPayload,
-                    scope_id: Swift.String
+                    module: Swift.String,
+                    name: Swift.String,
+                    scope_id: Swift.String,
+                    suite: Swift.String
                 ) {
                     self.files_count = files_count
                     self.kind = kind
+                    self.module = module
+                    self.name = name
                     self.scope_id = scope_id
+                    self.suite = suite
                 }
                 public enum CodingKeys: String, CodingKey {
                     case files_count
                     case kind
+                    case module
+                    case name
                     case scope_id
+                    case suite
                 }
             }
             /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidence/scopes`.
@@ -92038,29 +92062,53 @@ public enum Operations {
                             }
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/GET/responses/200/content/json/scopesPayload/kind`.
                             public var kind: Operations.getTestRunCoverageEvidence.Output.Ok.Body.jsonPayload.scopesPayloadPayload.kindPayload
-                            /// `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target.
+                            /// The test target (Xcode), project (Gradle) or label (Bazel).
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/GET/responses/200/content/json/scopesPayload/module`.
+                            public var module: Swift.String
+                            /// The test's name; empty unless the scope is a test.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/GET/responses/200/content/json/scopesPayload/name`.
+                            public var name: Swift.String
+                            /// The scope spelled for reading: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target. Not to be split: a module or a name may hold slashes; use the fields below.
                             ///
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/GET/responses/200/content/json/scopesPayload/scope_id`.
                             public var scope_id: Swift.String
+                            /// Empty for a target and for a test outside any suite.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/GET/responses/200/content/json/scopesPayload/suite`.
+                            public var suite: Swift.String
                             /// Creates a new `scopesPayloadPayload`.
                             ///
                             /// - Parameters:
                             ///   - files_count:
                             ///   - kind:
-                            ///   - scope_id: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target.
+                            ///   - module: The test target (Xcode), project (Gradle) or label (Bazel).
+                            ///   - name: The test's name; empty unless the scope is a test.
+                            ///   - scope_id: The scope spelled for reading: `Module/Suite/name` for a test, `Module/Suite` for a suite, `Module` for a target. Not to be split: a module or a name may hold slashes; use the fields below.
+                            ///   - suite: Empty for a target and for a test outside any suite.
                             public init(
                                 files_count: Swift.Int,
                                 kind: Operations.getTestRunCoverageEvidence.Output.Ok.Body.jsonPayload.scopesPayloadPayload.kindPayload,
-                                scope_id: Swift.String
+                                module: Swift.String,
+                                name: Swift.String,
+                                scope_id: Swift.String,
+                                suite: Swift.String
                             ) {
                                 self.files_count = files_count
                                 self.kind = kind
+                                self.module = module
+                                self.name = name
                                 self.scope_id = scope_id
+                                self.suite = suite
                             }
                             public enum CodingKeys: String, CodingKey {
                                 case files_count
                                 case kind
+                                case module
+                                case name
                                 case scope_id
+                                case suite
                             }
                         }
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/GET/responses/200/content/json/scopes`.
