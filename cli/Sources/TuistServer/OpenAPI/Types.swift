@@ -5456,12 +5456,96 @@ public enum Components {
                 public var covered_lines: Swift.Int
                 /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/executable_lines`.
                 public var executable_lines: Swift.Int
-                /// Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                /// Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                 ///
                 /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/partial`.
                 public var partial: Swift.Bool
                 /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/partial_schemes`.
                 public var partial_schemes: [Swift.String]
+                /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported`.
+                public struct reportedPayload: Codable, Hashable, Sendable {
+                    /// The commits the carried coverage was observed at.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/carried_from`.
+                    public var carried_from: [Swift.String]
+                    /// Those of them whose coverage was carried forward.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/carried_tests_count`.
+                    public var carried_tests_count: Swift.Int
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/coverage`.
+                    public var coverage: Swift.Double
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/covered_lines`.
+                    public var covered_lines: Swift.Int
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/executable_lines`.
+                    public var executable_lines: Swift.Int
+                    /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/gap_files_count`.
+                    public var gap_files_count: Swift.Int
+                    /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/kind`.
+                    @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                        case measured = "measured"
+                        case reported = "reported"
+                        case partial = "partial"
+                        case observed = "observed"
+                    }
+                    /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/kind`.
+                    public var kind: Components.Schemas.CoverageComparison.commitPayload.reportedPayload.kindPayload
+                    /// The candidate tests no run of the commit executed.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported/skipped_tests_count`.
+                    public var skipped_tests_count: Swift.Int
+                    /// Creates a new `reportedPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - carried_from: The commits the carried coverage was observed at.
+                    ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                    ///   - coverage:
+                    ///   - covered_lines:
+                    ///   - executable_lines:
+                    ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                    ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                    ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                    public init(
+                        carried_from: [Swift.String],
+                        carried_tests_count: Swift.Int,
+                        coverage: Swift.Double,
+                        covered_lines: Swift.Int,
+                        executable_lines: Swift.Int,
+                        gap_files_count: Swift.Int,
+                        kind: Components.Schemas.CoverageComparison.commitPayload.reportedPayload.kindPayload,
+                        skipped_tests_count: Swift.Int
+                    ) {
+                        self.carried_from = carried_from
+                        self.carried_tests_count = carried_tests_count
+                        self.coverage = coverage
+                        self.covered_lines = covered_lines
+                        self.executable_lines = executable_lines
+                        self.gap_files_count = gap_files_count
+                        self.kind = kind
+                        self.skipped_tests_count = skipped_tests_count
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case carried_from
+                        case carried_tests_count
+                        case coverage
+                        case covered_lines
+                        case executable_lines
+                        case gap_files_count
+                        case kind
+                        case skipped_tests_count
+                    }
+                }
+                /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/reported`.
+                public var reported: Components.Schemas.CoverageComparison.commitPayload.reportedPayload?
                 /// - Remark: Generated from `#/components/schemas/CoverageComparison/commit/schemes`.
                 public var schemes: [Swift.String]
                 /// Empty for a run without a commit, described alone.
@@ -5476,8 +5560,9 @@ public enum Components {
                 ///   - coverage:
                 ///   - covered_lines:
                 ///   - executable_lines:
-                ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                 ///   - partial_schemes:
+                ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                 ///   - schemes:
                 ///   - sha: Empty for a run without a commit, described alone.
                 public init(
@@ -5488,6 +5573,7 @@ public enum Components {
                     executable_lines: Swift.Int,
                     partial: Swift.Bool,
                     partial_schemes: [Swift.String],
+                    reported: Components.Schemas.CoverageComparison.commitPayload.reportedPayload? = nil,
                     schemes: [Swift.String],
                     sha: Swift.String
                 ) {
@@ -5498,6 +5584,7 @@ public enum Components {
                     self.executable_lines = executable_lines
                     self.partial = partial
                     self.partial_schemes = partial_schemes
+                    self.reported = reported
                     self.schemes = schemes
                     self.sha = sha
                 }
@@ -5509,6 +5596,7 @@ public enum Components {
                     case executable_lines
                     case partial
                     case partial_schemes
+                    case reported
                     case schemes
                     case sha
                 }
@@ -14201,12 +14289,96 @@ public enum Components {
                     public var covered_lines: Swift.Int
                     /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/executable_lines`.
                     public var executable_lines: Swift.Int
-                    /// Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                    /// Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                     ///
                     /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/partial`.
                     public var partial: Swift.Bool
                     /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/partial_schemes`.
                     public var partial_schemes: [Swift.String]
+                    /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported`.
+                    public struct reportedPayload: Codable, Hashable, Sendable {
+                        /// The commits the carried coverage was observed at.
+                        ///
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/carried_from`.
+                        public var carried_from: [Swift.String]
+                        /// Those of them whose coverage was carried forward.
+                        ///
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/carried_tests_count`.
+                        public var carried_tests_count: Swift.Int
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/coverage`.
+                        public var coverage: Swift.Double
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/covered_lines`.
+                        public var covered_lines: Swift.Int
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/executable_lines`.
+                        public var executable_lines: Swift.Int
+                        /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                        ///
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/gap_files_count`.
+                        public var gap_files_count: Swift.Int
+                        /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                        ///
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/kind`.
+                        @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                            case measured = "measured"
+                            case reported = "reported"
+                            case partial = "partial"
+                            case observed = "observed"
+                        }
+                        /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                        ///
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/kind`.
+                        public var kind: Components.Schemas.PullRequestCoverage.comparisonPayload.commitPayload.reportedPayload.kindPayload
+                        /// The candidate tests no run of the commit executed.
+                        ///
+                        /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported/skipped_tests_count`.
+                        public var skipped_tests_count: Swift.Int
+                        /// Creates a new `reportedPayload`.
+                        ///
+                        /// - Parameters:
+                        ///   - carried_from: The commits the carried coverage was observed at.
+                        ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                        ///   - coverage:
+                        ///   - covered_lines:
+                        ///   - executable_lines:
+                        ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                        ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                        ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                        public init(
+                            carried_from: [Swift.String],
+                            carried_tests_count: Swift.Int,
+                            coverage: Swift.Double,
+                            covered_lines: Swift.Int,
+                            executable_lines: Swift.Int,
+                            gap_files_count: Swift.Int,
+                            kind: Components.Schemas.PullRequestCoverage.comparisonPayload.commitPayload.reportedPayload.kindPayload,
+                            skipped_tests_count: Swift.Int
+                        ) {
+                            self.carried_from = carried_from
+                            self.carried_tests_count = carried_tests_count
+                            self.coverage = coverage
+                            self.covered_lines = covered_lines
+                            self.executable_lines = executable_lines
+                            self.gap_files_count = gap_files_count
+                            self.kind = kind
+                            self.skipped_tests_count = skipped_tests_count
+                        }
+                        public enum CodingKeys: String, CodingKey {
+                            case carried_from
+                            case carried_tests_count
+                            case coverage
+                            case covered_lines
+                            case executable_lines
+                            case gap_files_count
+                            case kind
+                            case skipped_tests_count
+                        }
+                    }
+                    /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                    ///
+                    /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/reported`.
+                    public var reported: Components.Schemas.PullRequestCoverage.comparisonPayload.commitPayload.reportedPayload?
                     /// - Remark: Generated from `#/components/schemas/PullRequestCoverage/comparison/commit/schemes`.
                     public var schemes: [Swift.String]
                     /// Empty for a run without a commit, described alone.
@@ -14221,8 +14393,9 @@ public enum Components {
                     ///   - coverage:
                     ///   - covered_lines:
                     ///   - executable_lines:
-                    ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                    ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                     ///   - partial_schemes:
+                    ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                     ///   - schemes:
                     ///   - sha: Empty for a run without a commit, described alone.
                     public init(
@@ -14233,6 +14406,7 @@ public enum Components {
                         executable_lines: Swift.Int,
                         partial: Swift.Bool,
                         partial_schemes: [Swift.String],
+                        reported: Components.Schemas.PullRequestCoverage.comparisonPayload.commitPayload.reportedPayload? = nil,
                         schemes: [Swift.String],
                         sha: Swift.String
                     ) {
@@ -14243,6 +14417,7 @@ public enum Components {
                         self.executable_lines = executable_lines
                         self.partial = partial
                         self.partial_schemes = partial_schemes
+                        self.reported = reported
                         self.schemes = schemes
                         self.sha = sha
                     }
@@ -14254,6 +14429,7 @@ public enum Components {
                         case executable_lines
                         case partial
                         case partial_schemes
+                        case reported
                         case schemes
                         case sha
                     }
@@ -16021,6 +16197,90 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/partial_schemes`.
             public var partial_schemes: [Swift.String]
+            /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported`.
+            public struct reportedPayload: Codable, Hashable, Sendable {
+                /// The commits the carried coverage was observed at.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/carried_from`.
+                public var carried_from: [Swift.String]
+                /// Those of them whose coverage was carried forward.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/carried_tests_count`.
+                public var carried_tests_count: Swift.Int
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/coverage`.
+                public var coverage: Swift.Double
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/covered_lines`.
+                public var covered_lines: Swift.Int
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/executable_lines`.
+                public var executable_lines: Swift.Int
+                /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/gap_files_count`.
+                public var gap_files_count: Swift.Int
+                /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/kind`.
+                @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                    case measured = "measured"
+                    case reported = "reported"
+                    case partial = "partial"
+                    case observed = "observed"
+                }
+                /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/kind`.
+                public var kind: Components.Schemas.CommitCoverage.reportedPayload.kindPayload
+                /// The candidate tests no run of the commit executed.
+                ///
+                /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported/skipped_tests_count`.
+                public var skipped_tests_count: Swift.Int
+                /// Creates a new `reportedPayload`.
+                ///
+                /// - Parameters:
+                ///   - carried_from: The commits the carried coverage was observed at.
+                ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                ///   - coverage:
+                ///   - covered_lines:
+                ///   - executable_lines:
+                ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                public init(
+                    carried_from: [Swift.String],
+                    carried_tests_count: Swift.Int,
+                    coverage: Swift.Double,
+                    covered_lines: Swift.Int,
+                    executable_lines: Swift.Int,
+                    gap_files_count: Swift.Int,
+                    kind: Components.Schemas.CommitCoverage.reportedPayload.kindPayload,
+                    skipped_tests_count: Swift.Int
+                ) {
+                    self.carried_from = carried_from
+                    self.carried_tests_count = carried_tests_count
+                    self.coverage = coverage
+                    self.covered_lines = covered_lines
+                    self.executable_lines = executable_lines
+                    self.gap_files_count = gap_files_count
+                    self.kind = kind
+                    self.skipped_tests_count = skipped_tests_count
+                }
+                public enum CodingKeys: String, CodingKey {
+                    case carried_from
+                    case carried_tests_count
+                    case coverage
+                    case covered_lines
+                    case executable_lines
+                    case gap_files_count
+                    case kind
+                    case skipped_tests_count
+                }
+            }
+            /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CommitCoverage/reported`.
+            public var reported: Components.Schemas.CommitCoverage.reportedPayload?
             /// The schemes that measured the commit.
             ///
             /// - Remark: Generated from `#/components/schemas/CommitCoverage/schemes`.
@@ -16091,6 +16351,7 @@ public enum Components {
             ///   - measured_files_count: Product files some run measured.
             ///   - partial:
             ///   - partial_schemes: The schemes only measured by runs that skipped tests on purpose.
+            ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
             ///   - schemes: The schemes that measured the commit.
             ///   - targets:
             ///   - test_run_ids:
@@ -16108,6 +16369,7 @@ public enum Components {
                 measured_files_count: Swift.Int,
                 partial: Swift.Bool,
                 partial_schemes: [Swift.String],
+                reported: Components.Schemas.CommitCoverage.reportedPayload? = nil,
                 schemes: [Swift.String],
                 targets: Components.Schemas.CommitCoverage.targetsPayload,
                 test_run_ids: [Swift.String],
@@ -16125,6 +16387,7 @@ public enum Components {
                 self.measured_files_count = measured_files_count
                 self.partial = partial
                 self.partial_schemes = partial_schemes
+                self.reported = reported
                 self.schemes = schemes
                 self.targets = targets
                 self.test_run_ids = test_run_ids
@@ -16143,6 +16406,7 @@ public enum Components {
                 case measured_files_count
                 case partial
                 case partial_schemes
+                case reported
                 case schemes
                 case targets
                 case test_run_ids
@@ -16445,6 +16709,86 @@ public enum Components {
         ///
         /// - Remark: Generated from `#/components/schemas/BuildIssuesIndexPage`.
         public typealias BuildIssuesIndexPage = Swift.Int
+        /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+        ///
+        /// - Remark: Generated from `#/components/schemas/CoverageReported`.
+        public struct CoverageReported: Codable, Hashable, Sendable {
+            /// The commits the carried coverage was observed at.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/carried_from`.
+            public var carried_from: [Swift.String]
+            /// Those of them whose coverage was carried forward.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/carried_tests_count`.
+            public var carried_tests_count: Swift.Int
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/coverage`.
+            public var coverage: Swift.Double
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/covered_lines`.
+            public var covered_lines: Swift.Int
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/executable_lines`.
+            public var executable_lines: Swift.Int
+            /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/gap_files_count`.
+            public var gap_files_count: Swift.Int
+            /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/kind`.
+            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case measured = "measured"
+                case reported = "reported"
+                case partial = "partial"
+                case observed = "observed"
+            }
+            /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/kind`.
+            public var kind: Components.Schemas.CoverageReported.kindPayload
+            /// The candidate tests no run of the commit executed.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageReported/skipped_tests_count`.
+            public var skipped_tests_count: Swift.Int
+            /// Creates a new `CoverageReported`.
+            ///
+            /// - Parameters:
+            ///   - carried_from: The commits the carried coverage was observed at.
+            ///   - carried_tests_count: Those of them whose coverage was carried forward.
+            ///   - coverage:
+            ///   - covered_lines:
+            ///   - executable_lines:
+            ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+            ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+            ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+            public init(
+                carried_from: [Swift.String],
+                carried_tests_count: Swift.Int,
+                coverage: Swift.Double,
+                covered_lines: Swift.Int,
+                executable_lines: Swift.Int,
+                gap_files_count: Swift.Int,
+                kind: Components.Schemas.CoverageReported.kindPayload,
+                skipped_tests_count: Swift.Int
+            ) {
+                self.carried_from = carried_from
+                self.carried_tests_count = carried_tests_count
+                self.coverage = coverage
+                self.covered_lines = covered_lines
+                self.executable_lines = executable_lines
+                self.gap_files_count = gap_files_count
+                self.kind = kind
+                self.skipped_tests_count = skipped_tests_count
+            }
+            public enum CodingKeys: String, CodingKey {
+                case carried_from
+                case carried_tests_count
+                case coverage
+                case covered_lines
+                case executable_lines
+                case gap_files_count
+                case kind
+                case skipped_tests_count
+            }
+        }
         /// - Remark: Generated from `#/components/schemas/TestRunCoverageFiles`.
         public struct TestRunCoverageFiles: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/TestRunCoverageFiles/filesPayload`.
@@ -53991,12 +54335,96 @@ public enum Operations {
                             public var covered_lines: Swift.Int
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/executable_lines`.
                             public var executable_lines: Swift.Int
-                            /// Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                            /// Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                             ///
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/partial`.
                             public var partial: Swift.Bool
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/partial_schemes`.
                             public var partial_schemes: [Swift.String]
+                            /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported`.
+                            public struct reportedPayload: Codable, Hashable, Sendable {
+                                /// The commits the carried coverage was observed at.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/carried_from`.
+                                public var carried_from: [Swift.String]
+                                /// Those of them whose coverage was carried forward.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/carried_tests_count`.
+                                public var carried_tests_count: Swift.Int
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/coverage`.
+                                public var coverage: Swift.Double
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/covered_lines`.
+                                public var covered_lines: Swift.Int
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/executable_lines`.
+                                public var executable_lines: Swift.Int
+                                /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/gap_files_count`.
+                                public var gap_files_count: Swift.Int
+                                /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/kind`.
+                                @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                                    case measured = "measured"
+                                    case reported = "reported"
+                                    case partial = "partial"
+                                    case observed = "observed"
+                                }
+                                /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/kind`.
+                                public var kind: Operations.getCommitCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload.kindPayload
+                                /// The candidate tests no run of the commit executed.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported/skipped_tests_count`.
+                                public var skipped_tests_count: Swift.Int
+                                /// Creates a new `reportedPayload`.
+                                ///
+                                /// - Parameters:
+                                ///   - carried_from: The commits the carried coverage was observed at.
+                                ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                                ///   - coverage:
+                                ///   - covered_lines:
+                                ///   - executable_lines:
+                                ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                                public init(
+                                    carried_from: [Swift.String],
+                                    carried_tests_count: Swift.Int,
+                                    coverage: Swift.Double,
+                                    covered_lines: Swift.Int,
+                                    executable_lines: Swift.Int,
+                                    gap_files_count: Swift.Int,
+                                    kind: Operations.getCommitCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload.kindPayload,
+                                    skipped_tests_count: Swift.Int
+                                ) {
+                                    self.carried_from = carried_from
+                                    self.carried_tests_count = carried_tests_count
+                                    self.coverage = coverage
+                                    self.covered_lines = covered_lines
+                                    self.executable_lines = executable_lines
+                                    self.gap_files_count = gap_files_count
+                                    self.kind = kind
+                                    self.skipped_tests_count = skipped_tests_count
+                                }
+                                public enum CodingKeys: String, CodingKey {
+                                    case carried_from
+                                    case carried_tests_count
+                                    case coverage
+                                    case covered_lines
+                                    case executable_lines
+                                    case gap_files_count
+                                    case kind
+                                    case skipped_tests_count
+                                }
+                            }
+                            /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/reported`.
+                            public var reported: Operations.getCommitCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload?
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/comparison/GET/responses/200/content/json/commit/schemes`.
                             public var schemes: [Swift.String]
                             /// Empty for a run without a commit, described alone.
@@ -54011,8 +54439,9 @@ public enum Operations {
                             ///   - coverage:
                             ///   - covered_lines:
                             ///   - executable_lines:
-                            ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                            ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                             ///   - partial_schemes:
+                            ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                             ///   - schemes:
                             ///   - sha: Empty for a run without a commit, described alone.
                             public init(
@@ -54023,6 +54452,7 @@ public enum Operations {
                                 executable_lines: Swift.Int,
                                 partial: Swift.Bool,
                                 partial_schemes: [Swift.String],
+                                reported: Operations.getCommitCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload? = nil,
                                 schemes: [Swift.String],
                                 sha: Swift.String
                             ) {
@@ -54033,6 +54463,7 @@ public enum Operations {
                                 self.executable_lines = executable_lines
                                 self.partial = partial
                                 self.partial_schemes = partial_schemes
+                                self.reported = reported
                                 self.schemes = schemes
                                 self.sha = sha
                             }
@@ -54044,6 +54475,7 @@ public enum Operations {
                                 case executable_lines
                                 case partial
                                 case partial_schemes
+                                case reported
                                 case schemes
                                 case sha
                             }
@@ -65895,6 +66327,90 @@ public enum Operations {
                         ///
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/partial_schemes`.
                         public var partial_schemes: [Swift.String]
+                        /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported`.
+                        public struct reportedPayload: Codable, Hashable, Sendable {
+                            /// The commits the carried coverage was observed at.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/carried_from`.
+                            public var carried_from: [Swift.String]
+                            /// Those of them whose coverage was carried forward.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/carried_tests_count`.
+                            public var carried_tests_count: Swift.Int
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/coverage`.
+                            public var coverage: Swift.Double
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/covered_lines`.
+                            public var covered_lines: Swift.Int
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/executable_lines`.
+                            public var executable_lines: Swift.Int
+                            /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/gap_files_count`.
+                            public var gap_files_count: Swift.Int
+                            /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/kind`.
+                            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                                case measured = "measured"
+                                case reported = "reported"
+                                case partial = "partial"
+                                case observed = "observed"
+                            }
+                            /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/kind`.
+                            public var kind: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload.kindPayload
+                            /// The candidate tests no run of the commit executed.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported/skipped_tests_count`.
+                            public var skipped_tests_count: Swift.Int
+                            /// Creates a new `reportedPayload`.
+                            ///
+                            /// - Parameters:
+                            ///   - carried_from: The commits the carried coverage was observed at.
+                            ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                            ///   - coverage:
+                            ///   - covered_lines:
+                            ///   - executable_lines:
+                            ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                            ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                            ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                            public init(
+                                carried_from: [Swift.String],
+                                carried_tests_count: Swift.Int,
+                                coverage: Swift.Double,
+                                covered_lines: Swift.Int,
+                                executable_lines: Swift.Int,
+                                gap_files_count: Swift.Int,
+                                kind: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload.kindPayload,
+                                skipped_tests_count: Swift.Int
+                            ) {
+                                self.carried_from = carried_from
+                                self.carried_tests_count = carried_tests_count
+                                self.coverage = coverage
+                                self.covered_lines = covered_lines
+                                self.executable_lines = executable_lines
+                                self.gap_files_count = gap_files_count
+                                self.kind = kind
+                                self.skipped_tests_count = skipped_tests_count
+                            }
+                            public enum CodingKeys: String, CodingKey {
+                                case carried_from
+                                case carried_tests_count
+                                case coverage
+                                case covered_lines
+                                case executable_lines
+                                case gap_files_count
+                                case kind
+                                case skipped_tests_count
+                            }
+                        }
+                        /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/reported`.
+                        public var reported: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload?
                         /// The schemes that measured the commit.
                         ///
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/complete/POST/responses/200/content/json/schemes`.
@@ -65965,6 +66481,7 @@ public enum Operations {
                         ///   - measured_files_count: Product files some run measured.
                         ///   - partial:
                         ///   - partial_schemes: The schemes only measured by runs that skipped tests on purpose.
+                        ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                         ///   - schemes: The schemes that measured the commit.
                         ///   - targets:
                         ///   - test_run_ids:
@@ -65982,6 +66499,7 @@ public enum Operations {
                             measured_files_count: Swift.Int,
                             partial: Swift.Bool,
                             partial_schemes: [Swift.String],
+                            reported: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload? = nil,
                             schemes: [Swift.String],
                             targets: Operations.completeCommitCoverage.Output.Ok.Body.jsonPayload.targetsPayload,
                             test_run_ids: [Swift.String],
@@ -65999,6 +66517,7 @@ public enum Operations {
                             self.measured_files_count = measured_files_count
                             self.partial = partial
                             self.partial_schemes = partial_schemes
+                            self.reported = reported
                             self.schemes = schemes
                             self.targets = targets
                             self.test_run_ids = test_run_ids
@@ -66017,6 +66536,7 @@ public enum Operations {
                             case measured_files_count
                             case partial
                             case partial_schemes
+                            case reported
                             case schemes
                             case targets
                             case test_run_ids
@@ -82277,12 +82797,96 @@ public enum Operations {
                             public var covered_lines: Swift.Int
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/executable_lines`.
                             public var executable_lines: Swift.Int
-                            /// Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                            /// Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                             ///
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/partial`.
                             public var partial: Swift.Bool
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/partial_schemes`.
                             public var partial_schemes: [Swift.String]
+                            /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported`.
+                            public struct reportedPayload: Codable, Hashable, Sendable {
+                                /// The commits the carried coverage was observed at.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/carried_from`.
+                                public var carried_from: [Swift.String]
+                                /// Those of them whose coverage was carried forward.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/carried_tests_count`.
+                                public var carried_tests_count: Swift.Int
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/coverage`.
+                                public var coverage: Swift.Double
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/covered_lines`.
+                                public var covered_lines: Swift.Int
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/executable_lines`.
+                                public var executable_lines: Swift.Int
+                                /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/gap_files_count`.
+                                public var gap_files_count: Swift.Int
+                                /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/kind`.
+                                @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                                    case measured = "measured"
+                                    case reported = "reported"
+                                    case partial = "partial"
+                                    case observed = "observed"
+                                }
+                                /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/kind`.
+                                public var kind: Operations.getTestRunCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload.kindPayload
+                                /// The candidate tests no run of the commit executed.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported/skipped_tests_count`.
+                                public var skipped_tests_count: Swift.Int
+                                /// Creates a new `reportedPayload`.
+                                ///
+                                /// - Parameters:
+                                ///   - carried_from: The commits the carried coverage was observed at.
+                                ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                                ///   - coverage:
+                                ///   - covered_lines:
+                                ///   - executable_lines:
+                                ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                                public init(
+                                    carried_from: [Swift.String],
+                                    carried_tests_count: Swift.Int,
+                                    coverage: Swift.Double,
+                                    covered_lines: Swift.Int,
+                                    executable_lines: Swift.Int,
+                                    gap_files_count: Swift.Int,
+                                    kind: Operations.getTestRunCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload.kindPayload,
+                                    skipped_tests_count: Swift.Int
+                                ) {
+                                    self.carried_from = carried_from
+                                    self.carried_tests_count = carried_tests_count
+                                    self.coverage = coverage
+                                    self.covered_lines = covered_lines
+                                    self.executable_lines = executable_lines
+                                    self.gap_files_count = gap_files_count
+                                    self.kind = kind
+                                    self.skipped_tests_count = skipped_tests_count
+                                }
+                                public enum CodingKeys: String, CodingKey {
+                                    case carried_from
+                                    case carried_tests_count
+                                    case coverage
+                                    case covered_lines
+                                    case executable_lines
+                                    case gap_files_count
+                                    case kind
+                                    case skipped_tests_count
+                                }
+                            }
+                            /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/reported`.
+                            public var reported: Operations.getTestRunCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload?
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/comparison/GET/responses/200/content/json/commit/schemes`.
                             public var schemes: [Swift.String]
                             /// Empty for a run without a commit, described alone.
@@ -82297,8 +82901,9 @@ public enum Operations {
                             ///   - coverage:
                             ///   - covered_lines:
                             ///   - executable_lines:
-                            ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                            ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                             ///   - partial_schemes:
+                            ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                             ///   - schemes:
                             ///   - sha: Empty for a run without a commit, described alone.
                             public init(
@@ -82309,6 +82914,7 @@ public enum Operations {
                                 executable_lines: Swift.Int,
                                 partial: Swift.Bool,
                                 partial_schemes: [Swift.String],
+                                reported: Operations.getTestRunCoverageComparison.Output.Ok.Body.jsonPayload.commitPayload.reportedPayload? = nil,
                                 schemes: [Swift.String],
                                 sha: Swift.String
                             ) {
@@ -82319,6 +82925,7 @@ public enum Operations {
                                 self.executable_lines = executable_lines
                                 self.partial = partial
                                 self.partial_schemes = partial_schemes
+                                self.reported = reported
                                 self.schemes = schemes
                                 self.sha = sha
                             }
@@ -82330,6 +82937,7 @@ public enum Operations {
                                 case executable_lines
                                 case partial
                                 case partial_schemes
+                                case reported
                                 case schemes
                                 case sha
                             }
@@ -89578,12 +90186,96 @@ public enum Operations {
                                 public var covered_lines: Swift.Int
                                 /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/executable_lines`.
                                 public var executable_lines: Swift.Int
-                                /// Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                                /// Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                                 ///
                                 /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/partial`.
                                 public var partial: Swift.Bool
                                 /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/partial_schemes`.
                                 public var partial_schemes: [Swift.String]
+                                /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported`.
+                                public struct reportedPayload: Codable, Hashable, Sendable {
+                                    /// The commits the carried coverage was observed at.
+                                    ///
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/carried_from`.
+                                    public var carried_from: [Swift.String]
+                                    /// Those of them whose coverage was carried forward.
+                                    ///
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/carried_tests_count`.
+                                    public var carried_tests_count: Swift.Int
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/coverage`.
+                                    public var coverage: Swift.Double
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/covered_lines`.
+                                    public var covered_lines: Swift.Int
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/executable_lines`.
+                                    public var executable_lines: Swift.Int
+                                    /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                    ///
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/gap_files_count`.
+                                    public var gap_files_count: Swift.Int
+                                    /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                    ///
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/kind`.
+                                    @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                                        case measured = "measured"
+                                        case reported = "reported"
+                                        case partial = "partial"
+                                        case observed = "observed"
+                                    }
+                                    /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                    ///
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/kind`.
+                                    public var kind: Operations.getPullRequestCoverage.Output.Ok.Body.jsonPayload.comparisonPayload.commitPayload.reportedPayload.kindPayload
+                                    /// The candidate tests no run of the commit executed.
+                                    ///
+                                    /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported/skipped_tests_count`.
+                                    public var skipped_tests_count: Swift.Int
+                                    /// Creates a new `reportedPayload`.
+                                    ///
+                                    /// - Parameters:
+                                    ///   - carried_from: The commits the carried coverage was observed at.
+                                    ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                                    ///   - coverage:
+                                    ///   - covered_lines:
+                                    ///   - executable_lines:
+                                    ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                    ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                                    ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                                    public init(
+                                        carried_from: [Swift.String],
+                                        carried_tests_count: Swift.Int,
+                                        coverage: Swift.Double,
+                                        covered_lines: Swift.Int,
+                                        executable_lines: Swift.Int,
+                                        gap_files_count: Swift.Int,
+                                        kind: Operations.getPullRequestCoverage.Output.Ok.Body.jsonPayload.comparisonPayload.commitPayload.reportedPayload.kindPayload,
+                                        skipped_tests_count: Swift.Int
+                                    ) {
+                                        self.carried_from = carried_from
+                                        self.carried_tests_count = carried_tests_count
+                                        self.coverage = coverage
+                                        self.covered_lines = covered_lines
+                                        self.executable_lines = executable_lines
+                                        self.gap_files_count = gap_files_count
+                                        self.kind = kind
+                                        self.skipped_tests_count = skipped_tests_count
+                                    }
+                                    public enum CodingKeys: String, CodingKey {
+                                        case carried_from
+                                        case carried_tests_count
+                                        case coverage
+                                        case covered_lines
+                                        case executable_lines
+                                        case gap_files_count
+                                        case kind
+                                        case skipped_tests_count
+                                    }
+                                }
+                                /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                                ///
+                                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/reported`.
+                                public var reported: Operations.getPullRequestCoverage.Output.Ok.Body.jsonPayload.comparisonPayload.commitPayload.reportedPayload?
                                 /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/pull-requests/{pull_request_number}/GET/responses/200/content/json/comparison/commit/schemes`.
                                 public var schemes: [Swift.String]
                                 /// Empty for a run without a commit, described alone.
@@ -89598,8 +90290,9 @@ public enum Operations {
                                 ///   - coverage:
                                 ///   - covered_lines:
                                 ///   - executable_lines:
-                                ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                                ///   - partial: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                                 ///   - partial_schemes:
+                                ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                                 ///   - schemes:
                                 ///   - sha: Empty for a run without a commit, described alone.
                                 public init(
@@ -89610,6 +90303,7 @@ public enum Operations {
                                     executable_lines: Swift.Int,
                                     partial: Swift.Bool,
                                     partial_schemes: [Swift.String],
+                                    reported: Operations.getPullRequestCoverage.Output.Ok.Body.jsonPayload.comparisonPayload.commitPayload.reportedPayload? = nil,
                                     schemes: [Swift.String],
                                     sha: Swift.String
                                 ) {
@@ -89620,6 +90314,7 @@ public enum Operations {
                                     self.executable_lines = executable_lines
                                     self.partial = partial
                                     self.partial_schemes = partial_schemes
+                                    self.reported = reported
                                     self.schemes = schemes
                                     self.sha = sha
                                 }
@@ -89631,6 +90326,7 @@ public enum Operations {
                                     case executable_lines
                                     case partial
                                     case partial_schemes
+                                    case reported
                                     case schemes
                                     case sha
                                 }
@@ -94659,6 +95355,90 @@ public enum Operations {
                         ///
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/partial_schemes`.
                         public var partial_schemes: [Swift.String]
+                        /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported`.
+                        public struct reportedPayload: Codable, Hashable, Sendable {
+                            /// The commits the carried coverage was observed at.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/carried_from`.
+                            public var carried_from: [Swift.String]
+                            /// Those of them whose coverage was carried forward.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/carried_tests_count`.
+                            public var carried_tests_count: Swift.Int
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/coverage`.
+                            public var coverage: Swift.Double
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/covered_lines`.
+                            public var covered_lines: Swift.Int
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/executable_lines`.
+                            public var executable_lines: Swift.Int
+                            /// Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/gap_files_count`.
+                            public var gap_files_count: Swift.Int
+                            /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/kind`.
+                            @frozen public enum kindPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                                case measured = "measured"
+                                case reported = "reported"
+                                case partial = "partial"
+                                case observed = "observed"
+                            }
+                            /// `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/kind`.
+                            public var kind: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload.kindPayload
+                            /// The candidate tests no run of the commit executed.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported/skipped_tests_count`.
+                            public var skipped_tests_count: Swift.Int
+                            /// Creates a new `reportedPayload`.
+                            ///
+                            /// - Parameters:
+                            ///   - carried_from: The commits the carried coverage was observed at.
+                            ///   - carried_tests_count: Those of them whose coverage was carried forward.
+                            ///   - coverage:
+                            ///   - covered_lines:
+                            ///   - executable_lines:
+                            ///   - gap_files_count: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                            ///   - kind: `measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.
+                            ///   - skipped_tests_count: The candidate tests no run of the commit executed.
+                            public init(
+                                carried_from: [Swift.String],
+                                carried_tests_count: Swift.Int,
+                                coverage: Swift.Double,
+                                covered_lines: Swift.Int,
+                                executable_lines: Swift.Int,
+                                gap_files_count: Swift.Int,
+                                kind: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload.kindPayload,
+                                skipped_tests_count: Swift.Int
+                            ) {
+                                self.carried_from = carried_from
+                                self.carried_tests_count = carried_tests_count
+                                self.coverage = coverage
+                                self.covered_lines = covered_lines
+                                self.executable_lines = executable_lines
+                                self.gap_files_count = gap_files_count
+                                self.kind = kind
+                                self.skipped_tests_count = skipped_tests_count
+                            }
+                            public enum CodingKeys: String, CodingKey {
+                                case carried_from
+                                case carried_tests_count
+                                case coverage
+                                case covered_lines
+                                case executable_lines
+                                case gap_files_count
+                                case kind
+                                case skipped_tests_count
+                            }
+                        }
+                        /// What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/reported`.
+                        public var reported: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload?
                         /// The schemes that measured the commit.
                         ///
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/GET/responses/200/content/json/schemes`.
@@ -94729,6 +95509,7 @@ public enum Operations {
                         ///   - measured_files_count: Product files some run measured.
                         ///   - partial:
                         ///   - partial_schemes: The schemes only measured by runs that skipped tests on purpose.
+                        ///   - reported: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
                         ///   - schemes: The schemes that measured the commit.
                         ///   - targets:
                         ///   - test_run_ids:
@@ -94746,6 +95527,7 @@ public enum Operations {
                             measured_files_count: Swift.Int,
                             partial: Swift.Bool,
                             partial_schemes: [Swift.String],
+                            reported: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.reportedPayload? = nil,
                             schemes: [Swift.String],
                             targets: Operations.getCommitCoverage.Output.Ok.Body.jsonPayload.targetsPayload,
                             test_run_ids: [Swift.String],
@@ -94763,6 +95545,7 @@ public enum Operations {
                             self.measured_files_count = measured_files_count
                             self.partial = partial
                             self.partial_schemes = partial_schemes
+                            self.reported = reported
                             self.schemes = schemes
                             self.targets = targets
                             self.test_run_ids = test_run_ids
@@ -94781,6 +95564,7 @@ public enum Operations {
                             case measured_files_count
                             case partial
                             case partial_schemes
+                            case reported
                             case schemes
                             case targets
                             case test_run_ids

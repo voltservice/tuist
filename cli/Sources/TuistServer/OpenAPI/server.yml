@@ -1273,7 +1273,7 @@ components:
               x-struct:
               x-validate:
             partial:
-              description: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+              description: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
               type: boolean
               x-struct:
               x-validate:
@@ -1283,6 +1283,69 @@ components:
                 x-struct:
                 x-validate:
               type: array
+              x-struct:
+              x-validate:
+            reported:
+              description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+              nullable: true
+              properties:
+                carried_from:
+                  description: The commits the carried coverage was observed at.
+                  items:
+                    type: string
+                    x-struct:
+                    x-validate:
+                  type: array
+                  x-struct:
+                  x-validate:
+                carried_tests_count:
+                  description: Those of them whose coverage was carried forward.
+                  type: integer
+                  x-struct:
+                  x-validate:
+                coverage:
+                  type: number
+                  x-struct:
+                  x-validate:
+                covered_lines:
+                  type: integer
+                  x-struct:
+                  x-validate:
+                executable_lines:
+                  type: integer
+                  x-struct:
+                  x-validate:
+                gap_files_count:
+                  description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                  type: integer
+                  x-struct:
+                  x-validate:
+                kind:
+                  description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                  enum:
+                    - measured
+                    - reported
+                    - partial
+                    - observed
+                  type: string
+                  x-struct:
+                  x-validate:
+                skipped_tests_count:
+                  description: The candidate tests no run of the commit executed.
+                  type: integer
+                  x-struct:
+                  x-validate:
+              required:
+                - kind
+                - coverage
+                - covered_lines
+                - executable_lines
+                - skipped_tests_count
+                - carried_tests_count
+                - gap_files_count
+                - carried_from
+              title: CoverageReported
+              type: object
               x-struct:
               x-validate:
             schemes:
@@ -7567,7 +7630,7 @@ components:
                   x-struct:
                   x-validate:
                 partial:
-                  description: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                  description: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                   type: boolean
                   x-struct:
                   x-validate:
@@ -7577,6 +7640,69 @@ components:
                     x-struct:
                     x-validate:
                   type: array
+                  x-struct:
+                  x-validate:
+                reported:
+                  description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                  nullable: true
+                  properties:
+                    carried_from:
+                      description: The commits the carried coverage was observed at.
+                      items:
+                        type: string
+                        x-struct:
+                        x-validate:
+                      type: array
+                      x-struct:
+                      x-validate:
+                    carried_tests_count:
+                      description: Those of them whose coverage was carried forward.
+                      type: integer
+                      x-struct:
+                      x-validate:
+                    coverage:
+                      type: number
+                      x-struct:
+                      x-validate:
+                    covered_lines:
+                      type: integer
+                      x-struct:
+                      x-validate:
+                    executable_lines:
+                      type: integer
+                      x-struct:
+                      x-validate:
+                    gap_files_count:
+                      description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                      type: integer
+                      x-struct:
+                      x-validate:
+                    kind:
+                      description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                      enum:
+                        - measured
+                        - reported
+                        - partial
+                        - observed
+                      type: string
+                      x-struct:
+                      x-validate:
+                    skipped_tests_count:
+                      description: The candidate tests no run of the commit executed.
+                      type: integer
+                      x-struct:
+                      x-validate:
+                  required:
+                    - kind
+                    - coverage
+                    - covered_lines
+                    - executable_lines
+                    - skipped_tests_count
+                    - carried_tests_count
+                    - gap_files_count
+                    - carried_from
+                  title: CoverageReported
+                  type: object
                   x-struct:
                   x-validate:
                 schemes:
@@ -9036,6 +9162,69 @@ components:
           type: array
           x-struct:
           x-validate:
+        reported:
+          description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+          nullable: true
+          properties:
+            carried_from:
+              description: The commits the carried coverage was observed at.
+              items:
+                type: string
+                x-struct:
+                x-validate:
+              type: array
+              x-struct:
+              x-validate:
+            carried_tests_count:
+              description: Those of them whose coverage was carried forward.
+              type: integer
+              x-struct:
+              x-validate:
+            coverage:
+              type: number
+              x-struct:
+              x-validate:
+            covered_lines:
+              type: integer
+              x-struct:
+              x-validate:
+            executable_lines:
+              type: integer
+              x-struct:
+              x-validate:
+            gap_files_count:
+              description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+              type: integer
+              x-struct:
+              x-validate:
+            kind:
+              description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+              enum:
+                - measured
+                - reported
+                - partial
+                - observed
+              type: string
+              x-struct:
+              x-validate:
+            skipped_tests_count:
+              description: The candidate tests no run of the commit executed.
+              type: integer
+              x-struct:
+              x-validate:
+          required:
+            - kind
+            - coverage
+            - covered_lines
+            - executable_lines
+            - skipped_tests_count
+            - carried_tests_count
+            - gap_files_count
+            - carried_from
+          title: CoverageReported
+          type: object
+          x-struct:
+          x-validate:
         schemes:
           description: The schemes that measured the commit.
           items:
@@ -9346,6 +9535,69 @@ components:
       minimum: 1
       title: BuildIssuesIndexPage
       type: integer
+      x-struct:
+      x-validate:
+    CoverageReported:
+      description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+      nullable: true
+      properties:
+        carried_from:
+          description: The commits the carried coverage was observed at.
+          items:
+            type: string
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
+        carried_tests_count:
+          description: Those of them whose coverage was carried forward.
+          type: integer
+          x-struct:
+          x-validate:
+        coverage:
+          type: number
+          x-struct:
+          x-validate:
+        covered_lines:
+          type: integer
+          x-struct:
+          x-validate:
+        executable_lines:
+          type: integer
+          x-struct:
+          x-validate:
+        gap_files_count:
+          description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+          type: integer
+          x-struct:
+          x-validate:
+        kind:
+          description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+          enum:
+            - measured
+            - reported
+            - partial
+            - observed
+          type: string
+          x-struct:
+          x-validate:
+        skipped_tests_count:
+          description: The candidate tests no run of the commit executed.
+          type: integer
+          x-struct:
+          x-validate:
+      required:
+        - kind
+        - coverage
+        - covered_lines
+        - executable_lines
+        - skipped_tests_count
+        - carried_tests_count
+        - gap_files_count
+        - carried_from
+      title: CoverageReported
+      type: object
       x-struct:
       x-validate:
     TestRunCoverageFiles:
@@ -23416,7 +23668,7 @@ paths:
                         x-struct:
                         x-validate:
                       partial:
-                        description: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                        description: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                         type: boolean
                         x-struct:
                         x-validate:
@@ -23426,6 +23678,69 @@ paths:
                           x-struct:
                           x-validate:
                         type: array
+                        x-struct:
+                        x-validate:
+                      reported:
+                        description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                        nullable: true
+                        properties:
+                          carried_from:
+                            description: The commits the carried coverage was observed at.
+                            items:
+                              type: string
+                              x-struct:
+                              x-validate:
+                            type: array
+                            x-struct:
+                            x-validate:
+                          carried_tests_count:
+                            description: Those of them whose coverage was carried forward.
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          coverage:
+                            type: number
+                            x-struct:
+                            x-validate:
+                          covered_lines:
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          executable_lines:
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          gap_files_count:
+                            description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          kind:
+                            description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                            enum:
+                              - measured
+                              - reported
+                              - partial
+                              - observed
+                            type: string
+                            x-struct:
+                            x-validate:
+                          skipped_tests_count:
+                            description: The candidate tests no run of the commit executed.
+                            type: integer
+                            x-struct:
+                            x-validate:
+                        required:
+                          - kind
+                          - coverage
+                          - covered_lines
+                          - executable_lines
+                          - skipped_tests_count
+                          - carried_tests_count
+                          - gap_files_count
+                          - carried_from
+                        title: CoverageReported
+                        type: object
                         x-struct:
                         x-validate:
                       schemes:
@@ -27447,6 +27762,69 @@ paths:
                       x-struct:
                       x-validate:
                     type: array
+                    x-struct:
+                    x-validate:
+                  reported:
+                    description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                    nullable: true
+                    properties:
+                      carried_from:
+                        description: The commits the carried coverage was observed at.
+                        items:
+                          type: string
+                          x-struct:
+                          x-validate:
+                        type: array
+                        x-struct:
+                        x-validate:
+                      carried_tests_count:
+                        description: Those of them whose coverage was carried forward.
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      coverage:
+                        type: number
+                        x-struct:
+                        x-validate:
+                      covered_lines:
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      executable_lines:
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      gap_files_count:
+                        description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      kind:
+                        description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                        enum:
+                          - measured
+                          - reported
+                          - partial
+                          - observed
+                        type: string
+                        x-struct:
+                        x-validate:
+                      skipped_tests_count:
+                        description: The candidate tests no run of the commit executed.
+                        type: integer
+                        x-struct:
+                        x-validate:
+                    required:
+                      - kind
+                      - coverage
+                      - covered_lines
+                      - executable_lines
+                      - skipped_tests_count
+                      - carried_tests_count
+                      - gap_files_count
+                      - carried_from
+                    title: CoverageReported
+                    type: object
                     x-struct:
                     x-validate:
                   schemes:
@@ -32664,7 +33042,7 @@ paths:
                         x-struct:
                         x-validate:
                       partial:
-                        description: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                        description: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                         type: boolean
                         x-struct:
                         x-validate:
@@ -32674,6 +33052,69 @@ paths:
                           x-struct:
                           x-validate:
                         type: array
+                        x-struct:
+                        x-validate:
+                      reported:
+                        description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                        nullable: true
+                        properties:
+                          carried_from:
+                            description: The commits the carried coverage was observed at.
+                            items:
+                              type: string
+                              x-struct:
+                              x-validate:
+                            type: array
+                            x-struct:
+                            x-validate:
+                          carried_tests_count:
+                            description: Those of them whose coverage was carried forward.
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          coverage:
+                            type: number
+                            x-struct:
+                            x-validate:
+                          covered_lines:
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          executable_lines:
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          gap_files_count:
+                            description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                            type: integer
+                            x-struct:
+                            x-validate:
+                          kind:
+                            description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                            enum:
+                              - measured
+                              - reported
+                              - partial
+                              - observed
+                            type: string
+                            x-struct:
+                            x-validate:
+                          skipped_tests_count:
+                            description: The candidate tests no run of the commit executed.
+                            type: integer
+                            x-struct:
+                            x-validate:
+                        required:
+                          - kind
+                          - coverage
+                          - covered_lines
+                          - executable_lines
+                          - skipped_tests_count
+                          - carried_tests_count
+                          - gap_files_count
+                          - carried_from
+                        title: CoverageReported
+                        type: object
                         x-struct:
                         x-validate:
                       schemes:
@@ -35623,7 +36064,7 @@ paths:
                             x-struct:
                             x-validate:
                           partial:
-                            description: Whether any scheme was only measured by runs that skipped tests; there is then no total delta.
+                            description: Whether any scheme was only measured by runs that skipped tests; there is then a total delta only when `reported` carried everything they skipped.
                             type: boolean
                             x-struct:
                             x-validate:
@@ -35633,6 +36074,69 @@ paths:
                               x-struct:
                               x-validate:
                             type: array
+                            x-struct:
+                            x-validate:
+                          reported:
+                            description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                            nullable: true
+                            properties:
+                              carried_from:
+                                description: The commits the carried coverage was observed at.
+                                items:
+                                  type: string
+                                  x-struct:
+                                  x-validate:
+                                type: array
+                                x-struct:
+                                x-validate:
+                              carried_tests_count:
+                                description: Those of them whose coverage was carried forward.
+                                type: integer
+                                x-struct:
+                                x-validate:
+                              coverage:
+                                type: number
+                                x-struct:
+                                x-validate:
+                              covered_lines:
+                                type: integer
+                                x-struct:
+                                x-validate:
+                              executable_lines:
+                                type: integer
+                                x-struct:
+                                x-validate:
+                              gap_files_count:
+                                description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                                type: integer
+                                x-struct:
+                                x-validate:
+                              kind:
+                                description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                                enum:
+                                  - measured
+                                  - reported
+                                  - partial
+                                  - observed
+                                type: string
+                                x-struct:
+                                x-validate:
+                              skipped_tests_count:
+                                description: The candidate tests no run of the commit executed.
+                                type: integer
+                                x-struct:
+                                x-validate:
+                            required:
+                              - kind
+                              - coverage
+                              - covered_lines
+                              - executable_lines
+                              - skipped_tests_count
+                              - carried_tests_count
+                              - gap_files_count
+                              - carried_from
+                            title: CoverageReported
+                            type: object
                             x-struct:
                             x-validate:
                           schemes:
@@ -37816,6 +38320,69 @@ paths:
                       x-struct:
                       x-validate:
                     type: array
+                    x-struct:
+                    x-validate:
+                  reported:
+                    description: What the commit is covered by once the tests its runs skipped are carried forward from the ancestor they last ran at. A test is carried only when it passed there and every file it executed, and every tracked file, is unchanged. Null for a commit published before reported coverage existed.
+                    nullable: true
+                    properties:
+                      carried_from:
+                        description: The commits the carried coverage was observed at.
+                        items:
+                          type: string
+                          x-struct:
+                          x-validate:
+                        type: array
+                        x-struct:
+                        x-validate:
+                      carried_tests_count:
+                        description: Those of them whose coverage was carried forward.
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      coverage:
+                        type: number
+                        x-struct:
+                        x-validate:
+                      covered_lines:
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      executable_lines:
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      gap_files_count:
+                        description: Files an ancestor measured that the commit's runs did not compile and whose coverage could not be carried.
+                        type: integer
+                        x-struct:
+                        x-validate:
+                      kind:
+                        description: '`measured`: the runs skipped nothing. `reported`: every skipped test was carried, so this is what a full run would measure. `partial`: some skipped tests or files could not be carried, and the figure is a lower bound. `observed`: the runs listed no candidate tests, so what they skipped is unknown.'
+                        enum:
+                          - measured
+                          - reported
+                          - partial
+                          - observed
+                        type: string
+                        x-struct:
+                        x-validate:
+                      skipped_tests_count:
+                        description: The candidate tests no run of the commit executed.
+                        type: integer
+                        x-struct:
+                        x-validate:
+                    required:
+                      - kind
+                      - coverage
+                      - covered_lines
+                      - executable_lines
+                      - skipped_tests_count
+                      - carried_tests_count
+                      - gap_files_count
+                      - carried_from
+                    title: CoverageReported
+                    type: object
                     x-struct:
                     x-validate:
                   schemes:
