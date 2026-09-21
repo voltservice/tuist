@@ -7164,6 +7164,19 @@ components:
                 type: string
                 x-struct:
                 x-validate:
+              lines:
+                description: The lines that scope ran in the file, as `[first, last]` ranges; empty when the client could only tell the file.
+                items:
+                  items:
+                    type: integer
+                    x-struct:
+                    x-validate:
+                  type: array
+                  x-struct:
+                  x-validate:
+                type: array
+                x-struct:
+                x-validate:
               path:
                 type: string
                 x-struct:
@@ -7180,6 +7193,7 @@ components:
               - path
               - scope
               - git_blob_id
+              - lines
             type: object
             x-struct:
             x-validate:
@@ -8848,6 +8862,20 @@ components:
         tests:
           items:
             properties:
+              lines:
+                description: The lines the test ran in the file, as `[first, last]` ranges; null when its evidence only knows the file.
+                items:
+                  items:
+                    type: integer
+                    x-struct:
+                    x-validate:
+                  type: array
+                  x-struct:
+                  x-validate:
+                nullable: true
+                type: array
+                x-struct:
+                x-validate:
               module_name:
                 type: string
                 x-struct:
@@ -8870,6 +8898,7 @@ components:
               - module_name
               - suite_name
               - name
+              - lines
             type: object
             x-struct:
             x-validate:
@@ -10025,6 +10054,15 @@ components:
       x-validate:
     CoverageFileDetail:
       properties:
+        carried_lines:
+          description: 'On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.'
+          items:
+            type: integer
+            x-struct:
+            x-validate:
+          type: array
+          x-struct:
+          x-validate:
         coverage:
           type: number
           x-struct:
@@ -21083,6 +21121,15 @@ paths:
             application/json:
               schema:
                 properties:
+                  carried_lines:
+                    description: 'On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.'
+                    items:
+                      type: integer
+                      x-struct:
+                      x-validate:
+                    type: array
+                    x-struct:
+                    x-validate:
                   coverage:
                     type: number
                     x-struct:
@@ -24140,6 +24187,14 @@ paths:
             type: string
             x-struct:
             x-validate:
+        - description: Only the tests that ran this line. A test whose evidence only knows the file stays, since it may have.
+          in: query
+          name: line
+          required: false
+          schema:
+            type: integer
+            x-struct:
+            x-validate:
       responses:
         '200':
           content:
@@ -24165,6 +24220,20 @@ paths:
                   tests:
                     items:
                       properties:
+                        lines:
+                          description: The lines the test ran in the file, as `[first, last]` ranges; null when its evidence only knows the file.
+                          items:
+                            items:
+                              type: integer
+                              x-struct:
+                              x-validate:
+                            type: array
+                            x-struct:
+                            x-validate:
+                          nullable: true
+                          type: array
+                          x-struct:
+                          x-validate:
                         module_name:
                           type: string
                           x-struct:
@@ -24187,6 +24256,7 @@ paths:
                         - module_name
                         - suite_name
                         - name
+                        - lines
                       type: object
                       x-struct:
                       x-validate:
@@ -29166,6 +29236,15 @@ paths:
             application/json:
               schema:
                 properties:
+                  carried_lines:
+                    description: 'On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.'
+                    items:
+                      type: integer
+                      x-struct:
+                      x-validate:
+                    type: array
+                    x-struct:
+                    x-validate:
                   coverage:
                     type: number
                     x-struct:
@@ -34406,6 +34485,19 @@ paths:
                           type: string
                           x-struct:
                           x-validate:
+                        lines:
+                          description: The lines that scope ran in the file, as `[first, last]` ranges; empty when the client could only tell the file.
+                          items:
+                            items:
+                              type: integer
+                              x-struct:
+                              x-validate:
+                            type: array
+                            x-struct:
+                            x-validate:
+                          type: array
+                          x-struct:
+                          x-validate:
                         path:
                           type: string
                           x-struct:
@@ -34422,6 +34514,7 @@ paths:
                         - path
                         - scope
                         - git_blob_id
+                        - lines
                       type: object
                       x-struct:
                       x-validate:

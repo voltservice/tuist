@@ -13686,6 +13686,10 @@ public enum Components {
                 ///
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceFiles/filesPayload/git_blob_id`.
                 public var git_blob_id: Swift.String
+                /// The lines that scope ran in the file, as `[first, last]` ranges; empty when the client could only tell the file.
+                ///
+                /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceFiles/filesPayload/lines`.
+                public var lines: [[Swift.Int]]
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceFiles/filesPayload/path`.
                 public var path: Swift.String
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceFiles/filesPayload/scope`.
@@ -13700,19 +13704,23 @@ public enum Components {
                 ///
                 /// - Parameters:
                 ///   - git_blob_id: The file's Git blob in the run's own coverage; empty when the run has none for it.
+                ///   - lines: The lines that scope ran in the file, as `[first, last]` ranges; empty when the client could only tell the file.
                 ///   - path:
                 ///   - scope:
                 public init(
                     git_blob_id: Swift.String,
+                    lines: [[Swift.Int]],
                     path: Swift.String,
                     scope: Components.Schemas.TestRunCoverageEvidenceFiles.filesPayloadPayload.scopePayload
                 ) {
                     self.git_blob_id = git_blob_id
+                    self.lines = lines
                     self.path = path
                     self.scope = scope
                 }
                 public enum CodingKeys: String, CodingKey {
                     case git_blob_id
+                    case lines
                     case path
                     case scope
                 }
@@ -15837,6 +15845,10 @@ public enum Components {
             public var targets: [Swift.String]
             /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceTests/testsPayload`.
             public struct testsPayloadPayload: Codable, Hashable, Sendable {
+                /// The lines the test ran in the file, as `[first, last]` ranges; null when its evidence only knows the file.
+                ///
+                /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceTests/testsPayload/lines`.
+                public var lines: [[Swift.Int]]?
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceTests/testsPayload/module_name`.
                 public var module_name: Swift.String
                 /// - Remark: Generated from `#/components/schemas/TestRunCoverageEvidenceTests/testsPayload/name`.
@@ -15848,22 +15860,26 @@ public enum Components {
                 /// Creates a new `testsPayloadPayload`.
                 ///
                 /// - Parameters:
+                ///   - lines: The lines the test ran in the file, as `[first, last]` ranges; null when its evidence only knows the file.
                 ///   - module_name:
                 ///   - name:
                 ///   - suite_name:
                 ///   - test_case_id:
                 public init(
+                    lines: [[Swift.Int]]? = nil,
                     module_name: Swift.String,
                     name: Swift.String,
                     suite_name: Swift.String,
                     test_case_id: Swift.String
                 ) {
+                    self.lines = lines
                     self.module_name = module_name
                     self.name = name
                     self.suite_name = suite_name
                     self.test_case_id = test_case_id
                 }
                 public enum CodingKeys: String, CodingKey {
+                    case lines
                     case module_name
                     case name
                     case suite_name
@@ -17343,6 +17359,10 @@ public enum Components {
         }
         /// - Remark: Generated from `#/components/schemas/CoverageFileDetail`.
         public struct CoverageFileDetail: Codable, Hashable, Sendable {
+            /// On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.
+            ///
+            /// - Remark: Generated from `#/components/schemas/CoverageFileDetail/carried_lines`.
+            public var carried_lines: [Swift.Int]?
             /// - Remark: Generated from `#/components/schemas/CoverageFileDetail/coverage`.
             public var coverage: Swift.Double
             /// - Remark: Generated from `#/components/schemas/CoverageFileDetail/covered_lines`.
@@ -17417,6 +17437,7 @@ public enum Components {
             /// Creates a new `CoverageFileDetail`.
             ///
             /// - Parameters:
+            ///   - carried_lines: On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.
             ///   - coverage:
             ///   - covered_lines:
             ///   - executable_lines:
@@ -17427,6 +17448,7 @@ public enum Components {
             ///   - targets:
             ///   - uncovered_ranges: Ranges of executable lines no test ran, as `[first, last]` pairs; null when the lines are unknown.
             public init(
+                carried_lines: [Swift.Int]? = nil,
                 coverage: Swift.Double,
                 covered_lines: Swift.Int,
                 executable_lines: Swift.Int,
@@ -17437,6 +17459,7 @@ public enum Components {
                 targets: [Swift.String],
                 uncovered_ranges: [[Swift.Int]]? = nil
             ) {
+                self.carried_lines = carried_lines
                 self.coverage = coverage
                 self.covered_lines = covered_lines
                 self.executable_lines = executable_lines
@@ -17448,6 +17471,7 @@ public enum Components {
                 self.uncovered_ranges = uncovered_ranges
             }
             public enum CodingKeys: String, CodingKey {
+                case carried_lines
                 case coverage
                 case covered_lines
                 case executable_lines
@@ -46746,6 +46770,10 @@ public enum Operations {
                 @frozen public enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/file/GET/responses/200/content/json`.
                     public struct jsonPayload: Codable, Hashable, Sendable {
+                        /// On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/file/GET/responses/200/content/json/carried_lines`.
+                        public var carried_lines: [Swift.Int]?
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/file/GET/responses/200/content/json/coverage`.
                         public var coverage: Swift.Double
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/commits/{git_commit_sha}/file/GET/responses/200/content/json/covered_lines`.
@@ -46820,6 +46848,7 @@ public enum Operations {
                         /// Creates a new `jsonPayload`.
                         ///
                         /// - Parameters:
+                        ///   - carried_lines: On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.
                         ///   - coverage:
                         ///   - covered_lines:
                         ///   - executable_lines:
@@ -46830,6 +46859,7 @@ public enum Operations {
                         ///   - targets:
                         ///   - uncovered_ranges: Ranges of executable lines no test ran, as `[first, last]` pairs; null when the lines are unknown.
                         public init(
+                            carried_lines: [Swift.Int]? = nil,
                             coverage: Swift.Double,
                             covered_lines: Swift.Int,
                             executable_lines: Swift.Int,
@@ -46840,6 +46870,7 @@ public enum Operations {
                             targets: [Swift.String],
                             uncovered_ranges: [[Swift.Int]]? = nil
                         ) {
+                            self.carried_lines = carried_lines
                             self.coverage = coverage
                             self.covered_lines = covered_lines
                             self.executable_lines = executable_lines
@@ -46851,6 +46882,7 @@ public enum Operations {
                             self.uncovered_ranges = uncovered_ranges
                         }
                         public enum CodingKeys: String, CodingKey {
+                            case carried_lines
                             case coverage
                             case covered_lines
                             case executable_lines
@@ -55224,12 +55256,21 @@ public enum Operations {
                 ///
                 /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/tests/GET/query/path`.
                 public var path: Swift.String
+                /// Only the tests that ran this line. A test whose evidence only knows the file stays, since it may have.
+                ///
+                /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/tests/GET/query/line`.
+                public var line: Swift.Int?
                 /// Creates a new `Query`.
                 ///
                 /// - Parameters:
                 ///   - path: The file's repository-relative path.
-                public init(path: Swift.String) {
+                ///   - line: Only the tests that ran this line. A test whose evidence only knows the file stays, since it may have.
+                public init(
+                    path: Swift.String,
+                    line: Swift.Int? = nil
+                ) {
                     self.path = path
+                    self.line = line
                 }
             }
             public var query: Operations.listTestRunCoverageEvidenceTests.Input.Query
@@ -55273,6 +55314,10 @@ public enum Operations {
                         public var targets: [Swift.String]
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/tests/GET/responses/200/content/json/testsPayload`.
                         public struct testsPayloadPayload: Codable, Hashable, Sendable {
+                            /// The lines the test ran in the file, as `[first, last]` ranges; null when its evidence only knows the file.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/tests/GET/responses/200/content/json/testsPayload/lines`.
+                            public var lines: [[Swift.Int]]?
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/tests/GET/responses/200/content/json/testsPayload/module_name`.
                             public var module_name: Swift.String
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/tests/GET/responses/200/content/json/testsPayload/name`.
@@ -55284,22 +55329,26 @@ public enum Operations {
                             /// Creates a new `testsPayloadPayload`.
                             ///
                             /// - Parameters:
+                            ///   - lines: The lines the test ran in the file, as `[first, last]` ranges; null when its evidence only knows the file.
                             ///   - module_name:
                             ///   - name:
                             ///   - suite_name:
                             ///   - test_case_id:
                             public init(
+                                lines: [[Swift.Int]]? = nil,
                                 module_name: Swift.String,
                                 name: Swift.String,
                                 suite_name: Swift.String,
                                 test_case_id: Swift.String
                             ) {
+                                self.lines = lines
                                 self.module_name = module_name
                                 self.name = name
                                 self.suite_name = suite_name
                                 self.test_case_id = test_case_id
                             }
                             public enum CodingKeys: String, CodingKey {
+                                case lines
                                 case module_name
                                 case name
                                 case suite_name
@@ -70757,6 +70806,10 @@ public enum Operations {
                 @frozen public enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/file/GET/responses/200/content/json`.
                     public struct jsonPayload: Codable, Hashable, Sendable {
+                        /// On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.
+                        ///
+                        /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/file/GET/responses/200/content/json/carried_lines`.
+                        public var carried_lines: [Swift.Int]?
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/file/GET/responses/200/content/json/coverage`.
                         public var coverage: Swift.Double
                         /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/file/GET/responses/200/content/json/covered_lines`.
@@ -70831,6 +70884,7 @@ public enum Operations {
                         /// Creates a new `jsonPayload`.
                         ///
                         /// - Parameters:
+                        ///   - carried_lines: On a commit whose skipped tests were all carried forward: the lines that count as covered through a skipped test alone. Their count in `lines` stays 0, since no run of the commit executed them; `covered_lines` and `uncovered_ranges` count them as covered. Empty otherwise.
                         ///   - coverage:
                         ///   - covered_lines:
                         ///   - executable_lines:
@@ -70841,6 +70895,7 @@ public enum Operations {
                         ///   - targets:
                         ///   - uncovered_ranges: Ranges of executable lines no test ran, as `[first, last]` pairs; null when the lines are unknown.
                         public init(
+                            carried_lines: [Swift.Int]? = nil,
                             coverage: Swift.Double,
                             covered_lines: Swift.Int,
                             executable_lines: Swift.Int,
@@ -70851,6 +70906,7 @@ public enum Operations {
                             targets: [Swift.String],
                             uncovered_ranges: [[Swift.Int]]? = nil
                         ) {
+                            self.carried_lines = carried_lines
                             self.coverage = coverage
                             self.covered_lines = covered_lines
                             self.executable_lines = executable_lines
@@ -70862,6 +70918,7 @@ public enum Operations {
                             self.uncovered_ranges = uncovered_ranges
                         }
                         public enum CodingKeys: String, CodingKey {
+                            case carried_lines
                             case coverage
                             case covered_lines
                             case executable_lines
@@ -85788,6 +85845,10 @@ public enum Operations {
                             ///
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/files/GET/responses/200/content/json/filesPayload/git_blob_id`.
                             public var git_blob_id: Swift.String
+                            /// The lines that scope ran in the file, as `[first, last]` ranges; empty when the client could only tell the file.
+                            ///
+                            /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/files/GET/responses/200/content/json/filesPayload/lines`.
+                            public var lines: [[Swift.Int]]
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/files/GET/responses/200/content/json/filesPayload/path`.
                             public var path: Swift.String
                             /// - Remark: Generated from `#/paths/api/projects/{account_handle}/{project_handle}/tests/coverage/runs/{test_run_id}/evidence/files/GET/responses/200/content/json/filesPayload/scope`.
@@ -85802,19 +85863,23 @@ public enum Operations {
                             ///
                             /// - Parameters:
                             ///   - git_blob_id: The file's Git blob in the run's own coverage; empty when the run has none for it.
+                            ///   - lines: The lines that scope ran in the file, as `[first, last]` ranges; empty when the client could only tell the file.
                             ///   - path:
                             ///   - scope:
                             public init(
                                 git_blob_id: Swift.String,
+                                lines: [[Swift.Int]],
                                 path: Swift.String,
                                 scope: Operations.listTestRunCoverageEvidenceFiles.Output.Ok.Body.jsonPayload.filesPayloadPayload.scopePayload
                             ) {
                                 self.git_blob_id = git_blob_id
+                                self.lines = lines
                                 self.path = path
                                 self.scope = scope
                             }
                             public enum CodingKeys: String, CodingKey {
                                 case git_blob_id
+                                case lines
                                 case path
                                 case scope
                             }
